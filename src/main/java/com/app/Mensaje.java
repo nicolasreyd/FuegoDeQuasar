@@ -11,74 +11,61 @@ import javax.persistence.Id;
 
 @Entity
 public class Mensaje {
-	
+
 	@Id
 	@GeneratedValue
 	private Integer id;
-	
+
 	@Column
-	String nombre_satelite;
-	
+	String name;
+
 	@Column
-	double distancia_satelite;
-	
+	double distance;
+
 	@ElementCollection
-	List<String> mensaje_texto;
-    
-	
-	
+	List<String> message;
+
 	public Integer getId() {
 		return id;
 	}
-
-
 
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-
-
 	public String getNombre_satelite() {
-		return nombre_satelite;
+		return name;
 	}
 
-
-
-	public void setNombre_satelite(String nombre_satelite) {
-		this.nombre_satelite = nombre_satelite;
+	public void setName(String nombre_satelite) {
+		this.name = nombre_satelite;
 	}
 
-
-
-	public double getDistancia_satelite() {
-		return distancia_satelite;
+	public double getDistance() {
+		return distance;
 	}
 
-
-
-	public void setDistancia_satelite(double distancia_satelite) {
-		this.distancia_satelite = distancia_satelite;
+	public void setDistance(double distancia_satelite) {
+		this.distance = distancia_satelite;
 	}
 
-
-
-	public List<String> getMensaje_texto() {
-		return mensaje_texto;
+	public List<String> getMessage() {
+		return message;
 	}
 
-
-
-	public void setMensaje_texto(List<String> mensaje_texto) {
-		this.mensaje_texto = mensaje_texto;
+	public void setMessage(List<String> mensaje_texto) {
+		this.message = mensaje_texto;
 	}
-
-
 
 	public Mensaje(String _nombre_satelite, List<String> _mensaje_texto, double _distancia_satelite) {
-		this.nombre_satelite = _nombre_satelite;
-		this.mensaje_texto = _mensaje_texto;
-		this.distancia_satelite = _distancia_satelite;
+		this.name = _nombre_satelite;
+		this.message = _mensaje_texto;
+		this.distance = _distancia_satelite;
+
+	}
+	
+	public Mensaje() {
+		
 		
 	}
 

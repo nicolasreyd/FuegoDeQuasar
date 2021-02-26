@@ -2,7 +2,6 @@ package com.app;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,64 +13,95 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.features.Position;
+import com.exception.ApiNoDataException;
+import com.exception.ApiRequestException;
 
 @RestController
 @RequestMapping("api")
-public class apiREST {
-	
+public class ApiREST {
+
 	private MensajeDAO MensajeDAO;
+	private SateliteDAO SateliteDAO;
 	private BaseRebelde base;
-	
-	public apiREST(MensajeDAO mensajeInterface) {
+
+	public ApiREST(MensajeDAO mensajeInterface, SateliteDAO satelitenterface) {
 		MensajeDAO = mensajeInterface;
+		SateliteDAO = satelitenterface;
 		List<Satelite> satelites = new ArrayList<Satelite>();
 
 		satelites.add(new Satelite("Kenobi", new Position(-500, -200)));
 		satelites.add(new Satelite("Skywalker", new Position(100, -100)));
 		satelites.add(new Satelite("Sato", new Position(500, 100)));
-		
+
 		base = new BaseRebelde(satelites);
 	}
-	
-	
+
 	@PostMapping("/topsecret")
-	public @ResponseBody TopSecret insertar(@RequestBody List<Mensaje> mensajes) {
+	public @ResponseBody TopSecret insertar(@RequestBody List<Mensaje> mensajes) throws Exception {
 		for (Mensaje mensaje : mensajes) {
 			MensajeDAO.save(mensaje);
 		}
 
-		 double[] distancias = new double[mensajes.size()];
-		 for (int i = 0; i < mensajes.size(); i++) {
-		    distancias[i] = mensajes.get(i).distancia_satelite;
-		 }
-		
+		double[] distancias = new double[mensajes.size()];
+		for (int i = 0; i < mensajes.size(); i++) {
+			distancias[i] = mensajes.get(i).getDistance();
+		}
+
 		TopSecret secret = new TopSecret(base.getLocation(distancias), base.getMessage(mensajes));
 		return secret;
-	
+
 	}
-	
+
 	@DeleteMapping("/eliminar/{id}")
 	public void borrar(@PathVariable("id") Integer id) {
 		MensajeDAO.deleteById(id);
 	}
-	
-	@GetMapping("/listar")
-	public List<Mensaje> list () {
+
+	@GetMapping("/listMessages")
+	public List<Mensaje> list() {
 		return MensajeDAO.findAll();
 
 	}
 	
-	@PutMapping("/actualizar")
-	public void update(@RequestBody Mensaje mensaje) {
-		MensajeDAO.save(mensaje);
-		
+	@PostMapping("/insertSatelite")
+	public void insertSatelite(@RequestBody Satelite satelite) {
+		SateliteDAO.save(satelite);
 	}
 	
-	/*
-	@GetMapping("/listar/{auto}")
-	public Optional<Auto> getAuto(@PathVariable("auto") Integer auto) {
-		return MensajeDAO.findById(auto);
-	}*/
+	@PostMapping("/topsecret_split/{satelite_name}")
+	public void topSecret_split_post(@PathVariable String satelite_name, @RequestBody Mensaje mensaje) {
+		mensaje.setName(satelite_name);
+		MensajeDAO.save(mensaje);
+	}
 	
+	@GetMapping("/topsecret_split/")
+	public TopSecret topSecret_split_get() {
+		
+		List<Mensaje> mensajes = MensajeDAO.findAll();
+		double[] distancias = new double[mensajes.size()];
+		TopSecret secret = null;
+		
+		int i = 0;
+		for (Mensaje msj : mensajes) {
+			distancias[i] = msj.getDistance();
+			i=+1;
+		}
+
+		try {
+			secret = new TopSecret(base.getLocation(distancias), base.getMessage(mensajes));
+		} catch (Exception e) {
+			throw new ApiNoDataException("No hay suficientes datos");
+		}
+		
+		return secret;
+		
+	}
+
+	@PutMapping("/updatePosition")
+	public void updateSatelite(@RequestBody Satelite satelite) {
+		SateliteDAO.save(satelite);
+
+	}
+
+
 }

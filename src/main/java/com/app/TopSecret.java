@@ -1,36 +1,29 @@
 package com.app;
 
-import com.features.Position;
-
 public class TopSecret {
 	Position position;
 	String message;
-	
-	
-	public Position getUbicacion() {
+
+	public Position getPosition() {
 		return position;
 	}
 
-
-	public void setUbicacion(Position ubicacion) {
+	public void setPosition(Position ubicacion) {
 		this.position = ubicacion;
 	}
 
-
-	public String getMensaje() {
+	public String getMessage() {
 		return message;
 	}
 
-
-	public void setMensaje(String mensaje) {
+	public void setMessage(String mensaje) {
 		this.message = mensaje;
 	}
-
 
 	public TopSecret(Position _ubicacion, String _mensaje) {
 		this.position = _ubicacion;
 		this.message = _mensaje;
-		
+
 	}
-	
+
 }
