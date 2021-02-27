@@ -1,12 +1,10 @@
 package com.app;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.math3.linear.RealVector;
 
-import com.exception.ApiNoDataException;
 import com.lemmingapex.trilateration.LinearLeastSquaresSolver;
 import com.lemmingapex.trilateration.TrilaterationFunction;
 
@@ -14,13 +12,23 @@ public class BaseRebelde {
 
 	List<Satelite> satelites;
 	MensajeParser parser;
+	static private BaseRebelde instance;
 
-	public BaseRebelde() {
+	private BaseRebelde() {
 		satelites = new ArrayList<Satelite>();
 		parser = new MensajeParser();
 	}
 
-	public BaseRebelde(List<Satelite> _satelites) {
+	public static BaseRebelde getInstance() {
+		if (instance == null) {
+
+			instance = new BaseRebelde();
+		}
+		return instance;
+
+	}
+
+	private BaseRebelde(List<Satelite> _satelites) {
 
 		this.satelites = _satelites;
 		parser = new MensajeParser();
@@ -38,16 +46,17 @@ public class BaseRebelde {
 		Position position = null;
 
 		try {
-			LinearLeastSquaresSolver solver = new LinearLeastSquaresSolver(new TrilaterationFunction(getCoordenadas(), distancias));
+			LinearLeastSquaresSolver solver = new LinearLeastSquaresSolver(
+					new TrilaterationFunction(getCoordenadas(), distancias));
 			RealVector vector = solver.solve();
 			position = new Position(vector.getEntry(0), vector.getEntry(1));
 		} catch (IllegalArgumentException e) {
-			throw new ApiNoDataException("Cantidad incorrecta de parametros.");
+			throw new ApiNoDataException("No se puede calcular la distancia.");
 		}
 		return position;
 	}
 
-	private double[][] getCoordenadas() {
+	public double[][] getCoordenadas() {
 
 		double[][] coordenadas = new double[satelites.size()][2];
 
@@ -65,13 +74,15 @@ public class BaseRebelde {
 		return coordenadas;
 	}
 
-	public String getMessage(List<Mensaje> mensajes) throws Exception {
+	public String getMessage(List<List<String>> mensaje_texts) throws Exception {
 
-		if (mensajes.size() == 0 || mensajes == null) {
+		if (mensaje_texts.size() == 0 || mensaje_texts == null) {
 			throw new Exception("Invalid request!.");
 		} else {
-			return this.parser.parse(mensajes);
+			
+		return	this.parser.parse(mensaje_texts); 
 		}
+		
 	}
 
 	/*
@@ -82,6 +93,39 @@ public class BaseRebelde {
 	public void addSatelite(Satelite satelite) {
 		this.satelites.add(satelite);
 
+	}
+
+	public Satelite findSatelite(String nombre_satelite) {
+		Satelite satelitefounded = null;
+		for (Satelite satelite : satelites) {
+			if (satelite.getName().equals(nombre_satelite))
+				satelitefounded = satelite;
+		}
+		return satelitefounded;
+	}
+
+	public List<Mensaje> getSatelitesMessages() {
+		List<Mensaje> mensajes = new ArrayList<Mensaje>();
+
+		for (Satelite satelite : this.satelites) {
+			if (satelite.getMessage() != null)
+				mensajes.add(satelite.getMessage());
+		}
+		return mensajes;
+	}
+
+	public void replaceSatelite(Satelite satelite) {
+		Satelite sateliteactual = findSatelite(satelite.name);
+		satelites.remove(sateliteactual);
+		this.satelites.add(satelite);
+
+	}
+
+	public void borrarMensajesDescartados() {
+		for (Satelite satelite : satelites) {
+			satelite.setMessage(null);
+		}
+		
 	}
 
 }

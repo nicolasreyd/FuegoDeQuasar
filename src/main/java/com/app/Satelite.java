@@ -1,44 +1,37 @@
 package com.app;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
-import org.hibernate.annotations.Type;
-
-@Entity
 public class Satelite {
 	// Atributos
 
-	@Id
-	@GeneratedValue
-	private Integer id;
-
-	@Column
 	String name;
 
-	@OneToOne(cascade=CascadeType.ALL)
 	Position position;
+
+	Mensaje message;
 
 	public Satelite(String _nombre, Position _coordenadas) {
 
 		this.name = _nombre;
 		this.position = _coordenadas;
 	}
-	
+
+	public Satelite(String _nombre, Position _coordenadas, Mensaje _mensaje) {
+
+		this.name = _nombre;
+		this.position = _coordenadas;
+		this.message = _mensaje;
+	}
+
 	public Satelite() {
 
 	}
 
-	public Integer getId() {
-		return id;
+	public Mensaje getMessage() {
+		return message;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setMessage(Mensaje message) {
+		this.message = message;
 	}
 
 	public String getName() {

@@ -2,36 +2,13 @@ package com.app;
 
 import java.util.List;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity
 public class Mensaje {
 
-	@Id
-	@GeneratedValue
-	private Integer id;
-
-	@Column
 	String name;
 
-	@Column
 	double distance;
 
-	@ElementCollection
 	List<String> message;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getNombre_satelite() {
 		return name;
@@ -63,10 +40,9 @@ public class Mensaje {
 		this.distance = _distancia_satelite;
 
 	}
-	
+
 	public Mensaje() {
-		
-		
+
 	}
 
 }
