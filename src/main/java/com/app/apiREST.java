@@ -31,7 +31,7 @@ public class ApiREST {
 		// Tambien armo lista de distancias para pasarle al metodo getLocation.
 		for (int i = 0; i < mensajes.size(); i++) {
 			distancias[i] = mensajes.get(i).getDistance();
-			base.findSatelite(mensajes.get(i).getNombre_satelite()).setMessage(mensajes.get(i));
+			base.findSatelite(mensajes.get(i).getName()).setMessage(mensajes.get(i));
 			;
 		}
 
@@ -46,7 +46,7 @@ public class ApiREST {
 	public void topSecret_split_post(@PathVariable String satelite_name, @RequestBody Mensaje mensaje) {
 		mensaje.setName(satelite_name);
 
-		Satelite satelite = base.findSatelite(mensaje.getNombre_satelite());
+		Satelite satelite = base.findSatelite(mensaje.getName());
 		satelite.setMessage(mensaje);
 
 	}
@@ -74,8 +74,17 @@ public class ApiREST {
 		} catch (Exception e) {
 			throw new ApiNoDataException("No hay suficientes datos");
 		}
+		
+		base.borrarMensajesDescartados();
 
 		return secret;
+
+	}
+	
+
+	@PutMapping("/updatePosition")
+	public void updateSatelite(@RequestBody Satelite satelite) {
+		BaseRebelde.getInstance().replaceSatelite(satelite);
 
 	}
 	
@@ -87,10 +96,5 @@ public class ApiREST {
 		return mensaje_texts;
 	}
 
-	@PutMapping("/updatePosition")
-	public void updateSatelite(@RequestBody Satelite satelite) {
-		base.replaceSatelite(satelite);
-
-	}
 
 }

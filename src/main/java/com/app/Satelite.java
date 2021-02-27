@@ -25,6 +25,10 @@ public class Satelite {
 	public Satelite() {
 
 	}
+	
+	public Satelite(SateliteBuilder builder) {
+
+	}
 
 	public Mensaje getMessage() {
 		return message;

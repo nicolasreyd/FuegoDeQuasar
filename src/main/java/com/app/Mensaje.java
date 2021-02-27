@@ -10,7 +10,7 @@ public class Mensaje {
 
 	List<String> message;
 
-	public String getNombre_satelite() {
+	public String getName() {
 		return name;
 	}
 

@@ -4,15 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static io.restassured.RestAssured.given;
 
 import java.lang.Math;
+import java.net.URISyntaxException;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+
 class DemoApplicationTests {
+
+	@BeforeEach
+	public void setUp() {
+		RestAssured.baseURI = "http://localhost";
+		RestAssured.port = 8080;
+	}
 
 	@Test
 	void contextLoads() {
@@ -23,13 +37,18 @@ class DemoApplicationTests {
 		this.cleanTest();
 		BaseRebelde base = BaseRebelde.getInstance();
 
-		Mensaje msjSky = new Mensaje("Skywalker", new ArrayList<String>(), 1);
-		Mensaje msjKenobi = new Mensaje("Kenobi", new ArrayList<String>(), 1);
-		Mensaje msjSato = new Mensaje("Sato", new ArrayList<String>(), Math.sqrt(2));
+		Mensaje msjSky = new MensajeBuilder().setDistance(1).setName("Skywalker").build();
+		Mensaje msjKenobi = new MensajeBuilder().setDistance(1).setName("Kenobi").build();
+		Mensaje msjSato = new MensajeBuilder().setDistance(Math.sqrt(2)).setName("Sato").build();
 
-		base.addSatelite(new Satelite("Skywalker", new Position(2, 1), msjSky));
-		base.addSatelite(new Satelite("Kenobi", new Position(1, 2), msjKenobi));
-		base.addSatelite(new Satelite("Sato", new Position(1, 1), msjSato));
+		Satelite sateliteSky = new SateliteBuilder().setName("Skywalker").setPosition(2, 1).setMessage(msjSky).build();
+		Satelite sateliteKenobi = new SateliteBuilder().setName("Kenobi").setPosition(1, 2).setMessage(msjKenobi)
+				.build();
+		Satelite sateliteSato = new SateliteBuilder().setName("Sato").setPosition(1, 1).setMessage(msjSato).build();
+
+		base.addSatelite(sateliteSky);
+		base.addSatelite(sateliteKenobi);
+		base.addSatelite(sateliteSato);
 
 		double[] distancias = new double[3];
 
@@ -48,12 +67,17 @@ class DemoApplicationTests {
 		// No hay cantidad suficiente de distancias para calcular.
 		BaseRebelde base = BaseRebelde.getInstance();
 
-		Mensaje msjSky = new Mensaje("Skywalker", new ArrayList<String>(), 1);
-		Mensaje msjKenobi = new Mensaje("Kenobi", new ArrayList<String>(), 1);
+		Mensaje msjSky = new MensajeBuilder().setDistance(1).setName("Skywalker").build();
+		Mensaje msjKenobi = new MensajeBuilder().setDistance(1).setName("Kenobi").build();
 
-		base.addSatelite(new Satelite("Skywalker", new Position(2, 1), msjSky));
-		base.addSatelite(new Satelite("Kenobi", new Position(1, 2), msjKenobi));
-		base.addSatelite(new Satelite("Sato", new Position(1, 1)));
+		Satelite sateliteSky = new SateliteBuilder().setName("Skywalker").setPosition(2, 1).setMessage(msjSky).build();
+		Satelite sateliteKenobi = new SateliteBuilder().setName("Kenobi").setPosition(1, 2).setMessage(msjKenobi)
+				.build();
+		Satelite sateliteSato = new SateliteBuilder().setName("Sato").setPosition(1, 1).build();
+
+		base.addSatelite(sateliteSky);
+		base.addSatelite(sateliteKenobi);
+		base.addSatelite(sateliteSato);
 
 		double[] distancias = new double[2];
 
@@ -114,9 +138,13 @@ class DemoApplicationTests {
 		this.cleanTest();
 		BaseRebelde base = BaseRebelde.getInstance();
 
-		base.addSatelite(new Satelite("Skywalker", new Position(100, 1)));
-		base.addSatelite(new Satelite("Kenobi", new Position(300, -200)));
-		base.addSatelite(new Satelite("Sato", new Position(400, 15)));
+		Satelite sateliteSky = new SateliteBuilder().setName("Skywalker").setPosition(100, 1).build();
+		Satelite sateliteKenobi = new SateliteBuilder().setName("Kenobi").setPosition(300, -200).build();
+		Satelite sateliteSato = new SateliteBuilder().setName("Sato").setPosition(400, 15).build();
+
+		base.addSatelite(sateliteSky);
+		base.addSatelite(sateliteKenobi);
+		base.addSatelite(sateliteSato);
 
 		double[][] coordenadas = base.getCoordenadas();
 
@@ -128,23 +156,125 @@ class DemoApplicationTests {
 		this.cleanTest();
 		BaseRebelde base = BaseRebelde.getInstance();
 
-		base.addSatelite(new Satelite("Skywalker", new Position(100, 1)));
-		base.addSatelite(new Satelite("Kenobi", new Position(300, -200)));
+		Satelite sateliteSky = new SateliteBuilder().setName("Skywalker").setPosition(100, 1).build();
+		Satelite sateliteKenobi = new SateliteBuilder().setName("Kenobi").setPosition(300, -200).build();
+
+		base.addSatelite(sateliteSky);
+		base.addSatelite(sateliteKenobi);
 
 		assertEquals(100, base.findSatelite("Skywalker").getPosition().getX());
 	}
-	
+
 	@Test
 	void replaceSatelite1() throws Exception {
 		this.cleanTest();
 		BaseRebelde base = BaseRebelde.getInstance();
 
-		base.addSatelite(new Satelite("Kenobi", new Position(100, 1)));
-		Satelite sateliteKenobi = new Satelite("Kenobi", new Position(300, -200));
-		 base.replaceSatelite(sateliteKenobi);
-		 
+		base.addSatelite(new SateliteBuilder().setName("Kenobi").setPosition(100, 1).build());
+
+		Satelite sateliteKenobi = new SateliteBuilder().setName("Kenobi").setPosition(300, -200).build();
+		base.replaceSatelite(sateliteKenobi);
+
 		assertEquals(-200, base.findSatelite("Kenobi").getPosition().getY());
 	}
+
+	@Test
+	public void testTopSecret() throws URISyntaxException {
+		this.cleanTest();
+		BaseRebelde base = BaseRebelde.getInstance();
+
+		Satelite sateliteSky = new SateliteBuilder().setName("Skywalker").setPosition(2, 1).build();
+		Satelite sateliteKenobi = new SateliteBuilder().setName("Kenobi").setPosition(1, 2).build();
+		Satelite sateliteSato = new SateliteBuilder().setName("Sato").setPosition(1, 1).build();
+
+		base.addSatelite(sateliteSky);
+		base.addSatelite(sateliteKenobi);
+		base.addSatelite(sateliteSato);
+
+		String[] contet_sky = { "Hola", "", "es", "", "mensaje" };
+		Mensaje msjSky = new MensajeBuilder().setName("Skywalker").setDistance(1).setMessage(contet_sky).build();
+		String[] contet_kenobi = { "", "este", "es", "un", "mensaje" };
+		Mensaje msjKenobi = new MensajeBuilder().setName("Kenobi").setDistance(1).setMessage(contet_kenobi).build();
+		String[] contet_sato = { "", "este", "es", "un", "mensaje" };
+		Mensaje msjSato = new MensajeBuilder().setName("Sato").setDistance(Math.sqrt(2)).setMessage(contet_sato)
+				.build();
+
+		System.out.println(msjKenobi.getName());
+
+		List<Mensaje> mensajes_request = new ArrayList<Mensaje>();
+		mensajes_request.add(msjKenobi);
+		mensajes_request.add(msjSky);
+		mensajes_request.add(msjSato);
+
+		Response response = given().contentType("application/json").accept("application/json").body(mensajes_request)
+				.when().post("http://localhost:8080/api/topsecret").then().statusCode(200)
+				.contentType("application/json").extract().response();
+
+		String message = response.jsonPath().getString("message");
+		assertEquals("Hola este es un mensaje", message);
+
+	}
+
+	@Test
+	public void test_topsecret_split_get() throws URISyntaxException {
+		this.cleanTest();
+
+		String[] contet_sky = { "Hola", "", "es", "", "mensaje" };
+		Mensaje msjSky = new MensajeBuilder().setDistance(1).setMessage(contet_sky).build();
+		String[] contet_kenobi = { "", "este", "es", "un", "mensaje" };
+		Mensaje msjKenobi = new MensajeBuilder().setDistance(1).setMessage(contet_kenobi).build();
+		String[] contet_sato = { "", "este", "es", "un", "mensaje" };
+		Mensaje msjSato = new MensajeBuilder().setDistance(Math.sqrt(2)).setMessage(contet_sato).build();
+
+		given().contentType("application/json").accept("application/json").body(msjKenobi).when()
+				.post("http://localhost:8080/api/topsecret_split/Kenobi").then().statusCode(200);
+
+		given().contentType("application/json").accept("application/json").body(msjSky).when()
+				.post("http://localhost:8080/api/topsecret_split/Skywalker").then().statusCode(200);
+
+		given().contentType("application/json").accept("application/json").body(msjSato).when()
+				.post("http://localhost:8080/api/topsecret_split/Sato").then().statusCode(200);
+
+		Response response = given().contentType("application/json").accept("application/json").when()
+				.get("http://localhost:8080/api/topsecret_split/").then().statusCode(200)
+				.contentType("application/json").extract().response();
+
+		String message = response.jsonPath().getString("message");
+		assertEquals("Hola este es un mensaje", message);
+
+	}
+
+	@Test
+	public void test_topsecret_split_post() throws URISyntaxException {
+		this.cleanTest();
+
+		String[] contet_kenobi = { "", "este", "es", "un", "mensaje" };
+		Mensaje msjKenobi = new MensajeBuilder().setDistance(1).setMessage(contet_kenobi).build();
+
+		Response response = given().contentType("application/json").accept("application/json").body(msjKenobi).when()
+				.post("http://localhost:8080/api/topsecret_split/Kenobi").then().statusCode(200).extract().response();
+
+		assertEquals(200, response.getStatusCode());
+
+	}
+
+	
+	  @Test public void test_update_position_put() throws URISyntaxException {
+	  this.cleanTest();
+	  
+	  Satelite sateliteSky_original = new
+	  SateliteBuilder().setName("Skywalker").setPosition(1, 2).build();
+	  BaseRebelde.getInstance().satelites.add(sateliteSky_original); Satelite
+	  sateliteSky_new = new SateliteBuilder().setName("Skywalker").setPosition(2,
+	  -92).build();
+	  
+	  given().contentType("application/json").accept("application/json").body(
+	  sateliteSky_new).when()
+	  .put("http://localhost:8080/api/updatePosition").then().statusCode(200);
+	  
+	  
+	  }
+	 
 
 	private void cleanTest() {
 		BaseRebelde base = BaseRebelde.getInstance();
