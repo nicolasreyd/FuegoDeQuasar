@@ -20,15 +20,59 @@ La solucion se encuentra hosteada en Amazon Web Services, para consumir la api s
 ```   
 - **Serivicios disponibles:**
 
-	- POST /api/topsecret   ->  Decodifica el mensaje y la ubicacion segun informacion obtenida en Satelites
+- POST /api/topsecret   ->  Decodifica el mensaje y la ubicacion segun informacion obtenida en Satelites
+	
+**Ejemplo Request**	
+```json
+[
+        {
+            "name": "Kenobi",
+            "distance": 100.0,
+            "message": ["", "este", "es", "un", "mensaje","","largo","","","comun"]
+        },
+        {
+            "name": "Skywalker",
+            "distance": 115.5,
+            "message": ["Hola", "", "", "", "","mas","largo","","","comun"]
+        },
+        {
+            "name": "Sato",
+            "distance": -200,
+            "message": ["", "", "es", "", "mensaje","mas","","de","lo"]
+        }
+]
+```
+- POST /api/topsecret_split/{satelite_name}  ->  Se inserta un mensaje y distancia en cada Satelite de a uno a la vez.
+
+**Ejemplo Request**		
+```json
+{
+    "distance": 100.0,
+    "message": [
+        "",
+        "este",
+        "es",
+        "un",
+        "mensaje"
+    ]
+}
+```		
+- GET /api/topsecret_split/  ->  Se obtiene lo instertado en el servicio anterior.
 		
-	- POST /api/topsecret_split/{satelite_name}  ->  Se inserta un mensaje y distancia en cada Satelite de a uno a la vez.
+- GET /api/{satelite_name}/  ->  Obtiene un Satelite segun nombre
 		
-	- GET /api/topsecret_split/  ->  Se obtiene lo instertado en el servicio anterior.
-		
-	- GET /api/{satelite_name}/  ->  Obtiene un Satelite segun nombre
-		
-	- PUT /api/updatePosition  ->  Actualiza la posicion original de un Satelite
+- PUT /api/updatePosition  ->  Actualiza la posicion original de un Satelite
+
+**Ejemplo Request**		
+```json
+{
+    "name" :"Kenobi",
+    "position": {
+                "x":7,
+                "y":3
+          }
+}
+```	
 
 
 Se podra encontrar el archivo **FuegoQuasar.postman_collection.json** con ejemplos de cada request.
