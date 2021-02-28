@@ -16,46 +16,23 @@ La solucion se encuentra hosteada en Amazon Web Services, para consumir la api s
 
 
 Para mayor agilidad, se podra encontrar el archivo **FuegoQuasar.postman_collection.json** con ejemplos de cada request.
-```
-![Alt text](/assets/PostmanScreenshot.jpg?raw=true "Postman")
-```
 
-```
-![alt text](https://github.com/nicolasreyd/FuegoDeQuasar/blob/development/PostmanScreenshot.jpg?raw=true)
-```
-
+![Alt text](/assets/PostmanScreenshot.jpg?raw=true "Diagrama")
 
 ## Diagrama de clases
 
 A continuacion se detalla el diagrama de clases de la solucion, indicando las clases involucradas y sus metodos mas significativos:
 
-```
-![alt text](https://github.com/nicolasreyd/FuegoDeQuasar/blob/development/fuegoquasarclases.jpg?raw=true)
-```
 ![Alt text](/assets/fuegoquasarclases.jpg?raw=true "Diagrama")
 
 ## Diagramas de flujo
 
-You can render UML diagrams using [Mermaid](https://mermaidjs.github.io/). For example, this will produce a sequence diagram:
+A continuacion se detalla los diagramas de flujos de los requerimientos principales del ejercicio:
 
-```mermaid
-sequenceDiagram
-Alice ->> Bob: Hello Bob, how are you?
-Bob-->>John: How about you John?
-Bob--x Alice: I am good thanks!
-Bob-x John: I am good thanks!
-Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
+![Alt text](/assets/_api_topsecret.png?raw=true "Diagrama")
 
-Bob-->Alice: Checking with John...
-Alice->John: Yes... John, how are you?
-```
 
-And this will produce a flow chart:
+![Alt text](/assets/_api_topsecret_split_satelitename.png?raw=true "Diagrama")
 
-```mermaid
-graph LR
-A[Square Rect] -- Link text --> B((Circle))
-A --> C(Round Rect)
-B --> D{Rhombus}
-C --> D
-```
+
+![Alt text](/assets/gettopsecret_split.png?raw=true "Diagrama")
