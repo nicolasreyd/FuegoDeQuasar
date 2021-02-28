@@ -41,7 +41,14 @@ public class BaseRebelde {
 	public void setSatelites(List<Satelite> satelites) {
 		this.satelites = satelites;
 	}
-
+	
+	/**
+	Devuelve la ubicacion de la nave imperial en base a la posicion de los satelites activos.
+	Deben existir al menos 3 de estos ultimos para la triangulacion.
+	@param distancias
+	@return Posicion de la nave imperial
+	@throws IllegalArgumentException, ApiNoDataException
+	*/
 	public Position getLocation(double[] distancias) {
 		Position position = null;
 
@@ -56,6 +63,11 @@ public class BaseRebelde {
 		return position;
 	}
 
+	/**
+	Obtiene las posiciones de todos los satelites activos.
+	@param 
+	@return posiciones de los satelites activos en formato x,y.
+	*/
 	public double[][] getCoordenadas() {
 
 		double[][] coordenadas = new double[satelites.size()][2];
@@ -73,28 +85,41 @@ public class BaseRebelde {
 
 		return coordenadas;
 	}
-
+	
+	
+	/**
+	Devuelve el mensaje decodificado.
+	@param lista de palabras que contiene cada uno de los mensajes interceptados en los
+		   satelites activos.
+	@return Mensaje decoficado en formato String.
+	@throws Exception, ApiNoDataException.
+	*/
 	public String getMessage(List<List<String>> mensaje_texts) throws Exception {
 
 		if (mensaje_texts.size() == 0 || mensaje_texts == null) {
 			throw new Exception("Invalid request!.");
 		} else {
-			
-		return	this.parser.parse(mensaje_texts); 
-		}
-		
-	}
 
-	/*
-	 * private int getMaxSize(List<Mensaje> mensajes) { int max = 0; for (Mensaje
-	 * mensaje : mensajes) { if (mensaje.getMessage().size() > max) max =
-	 * mensaje.getMessage().size(); } return max; }
-	 */
+			return this.parser.parse(mensaje_texts);
+		}
+
+	}
+	
+	/**
+	Agrega un satelite a la flota rebelde.
+	@param Satelite
+	@return 
+	*/
 	public void addSatelite(Satelite satelite) {
 		this.satelites.add(satelite);
 
 	}
 
+	/**
+	Devuelve el satelite de la flota segun nombre.
+	@param String nombre del satelite
+	@return Satelite encontrado
+	*/
 	public Satelite findSatelite(String nombre_satelite) {
 		Satelite satelitefounded = null;
 		for (Satelite satelite : satelites) {
@@ -104,6 +129,11 @@ public class BaseRebelde {
 		return satelitefounded;
 	}
 
+	/**
+	Devuelve los mensajes interceptados en cada satelite
+	@param 
+	@return Lista de Mensajes
+	*/
 	public List<Mensaje> getSatelitesMessages() {
 		List<Mensaje> mensajes = new ArrayList<Mensaje>();
 
@@ -114,18 +144,27 @@ public class BaseRebelde {
 		return mensajes;
 	}
 
+	/**
+	Reemplaza la ubicacion de los satelites de la flota.
+	@param Satelite con nueva ubicacion 
+	@return
+	*/
 	public void replaceSatelite(Satelite satelite) {
 		Satelite sateliteactual = findSatelite(satelite.name);
-		satelites.remove(sateliteactual);
-		this.satelites.add(satelite);
+		sateliteactual.setPosition(satelite.getPosition());
 
 	}
 
+	/**
+	Borra mensajes ya decodificados.
+	@paramn 
+	@return
+	*/
 	public void borrarMensajesDescartados() {
 		for (Satelite satelite : satelites) {
 			satelite.setMessage(null);
 		}
-		
+
 	}
 
 }

@@ -26,9 +26,11 @@ public class ApiREST {
 	public @ResponseBody TopSecret insertar(@RequestBody List<Mensaje> mensajes) throws Exception {
 
 		double[] distancias = new double[mensajes.size()];
-
-		// Recorro los mensajes y los guardo en sus respectivos satelites.
-		// Tambien armo lista de distancias para pasarle al metodo getLocation.
+		
+		/**
+		 Recorro los mensajes y los guardo en sus respectivos satelites.
+	     Tambien armo lista de distancias para pasarle al metodo getLocation.
+	     */
 		for (int i = 0; i < mensajes.size(); i++) {
 			distancias[i] = mensajes.get(i).getDistance();
 			base.findSatelite(mensajes.get(i).getName()).setMessage(mensajes.get(i));
@@ -85,6 +87,12 @@ public class ApiREST {
 	@PutMapping("/updatePosition")
 	public void updateSatelite(@RequestBody Satelite satelite) {
 		BaseRebelde.getInstance().replaceSatelite(satelite);
+
+	}
+	
+	@GetMapping("/{satelite_name}")
+	public Satelite getSatelite(@PathVariable String satelite_name) {
+		return base.findSatelite(satelite_name);
 
 	}
 	

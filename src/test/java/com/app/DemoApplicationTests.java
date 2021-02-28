@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
@@ -207,7 +206,7 @@ class DemoApplicationTests {
 		mensajes_request.add(msjSato);
 
 		Response response = given().contentType("application/json").accept("application/json").body(mensajes_request)
-				.when().post("http://localhost:8080/api/topsecret").then().statusCode(200)
+				.when().post(RestAssured.baseURI + ":8080/api/topsecret").then().statusCode(200)
 				.contentType("application/json").extract().response();
 
 		String message = response.jsonPath().getString("message");
@@ -227,16 +226,16 @@ class DemoApplicationTests {
 		Mensaje msjSato = new MensajeBuilder().setDistance(Math.sqrt(2)).setMessage(contet_sato).build();
 
 		given().contentType("application/json").accept("application/json").body(msjKenobi).when()
-				.post("http://localhost:8080/api/topsecret_split/Kenobi").then().statusCode(200);
+				.post(RestAssured.baseURI + ":8080/api/topsecret_split/Kenobi").then().statusCode(200);
 
 		given().contentType("application/json").accept("application/json").body(msjSky).when()
-				.post("http://localhost:8080/api/topsecret_split/Skywalker").then().statusCode(200);
+				.post(RestAssured.baseURI + ":8080/api/topsecret_split/Skywalker").then().statusCode(200);
 
 		given().contentType("application/json").accept("application/json").body(msjSato).when()
-				.post("http://localhost:8080/api/topsecret_split/Sato").then().statusCode(200);
+				.post(RestAssured.baseURI + ":8080/api/topsecret_split/Sato").then().statusCode(200);
 
 		Response response = given().contentType("application/json").accept("application/json").when()
-				.get("http://localhost:8080/api/topsecret_split/").then().statusCode(200)
+				.get(RestAssured.baseURI + ":8080/api/topsecret_split/").then().statusCode(200)
 				.contentType("application/json").extract().response();
 
 		String message = response.jsonPath().getString("message");
@@ -252,29 +251,41 @@ class DemoApplicationTests {
 		Mensaje msjKenobi = new MensajeBuilder().setDistance(1).setMessage(contet_kenobi).build();
 
 		Response response = given().contentType("application/json").accept("application/json").body(msjKenobi).when()
-				.post("http://localhost:8080/api/topsecret_split/Kenobi").then().statusCode(200).extract().response();
+				.post(RestAssured.baseURI + ":8080/api/topsecret_split/Kenobi").then().statusCode(200).extract()
+				.response();
 
 		assertEquals(200, response.getStatusCode());
 
 	}
 
-	
-	  @Test public void test_update_position_put() throws URISyntaxException {
-	  this.cleanTest();
-	  
-	  Satelite sateliteSky_original = new
-	  SateliteBuilder().setName("Skywalker").setPosition(1, 2).build();
-	  BaseRebelde.getInstance().satelites.add(sateliteSky_original); Satelite
-	  sateliteSky_new = new SateliteBuilder().setName("Skywalker").setPosition(2,
-	  -92).build();
-	  
-	  given().contentType("application/json").accept("application/json").body(
-	  sateliteSky_new).when()
-	  .put("http://localhost:8080/api/updatePosition").then().statusCode(200);
-	  
-	  
-	  }
-	 
+	@Test
+	public void test_update_position_put() throws URISyntaxException {
+		this.cleanTest();
+
+		Satelite sateliteSky_original = new SateliteBuilder().setName("Skywalker").setPosition(1, 2).build();
+		BaseRebelde.getInstance().satelites.add(sateliteSky_original);
+		Satelite sateliteSky_new = new SateliteBuilder().setName("Skywalker").setPosition(2, -92).build();
+
+		given().contentType("application/json").accept("application/json").body(sateliteSky_new).when()
+				.put(RestAssured.baseURI + ":8080/api/updatePosition").then().statusCode(200);
+
+	}
+
+	@Test
+	public void test_get_satelite() throws URISyntaxException {
+		this.cleanTest();
+		BaseRebelde base = BaseRebelde.getInstance();
+
+		Satelite sateliteSky_original = new SateliteBuilder().setName("Skywalker").setPosition(1, -200).build();
+		base.satelites.add(sateliteSky_original);
+
+		Response response = given().contentType("application/json").accept("application/json").when()
+				.get(RestAssured.baseURI + ":8080/api/Skywalker").then().statusCode(200).extract().response();
+
+		String name = response.jsonPath().get("name");
+		assertEquals("Skywalker", name);
+
+	}
 
 	private void cleanTest() {
 		BaseRebelde base = BaseRebelde.getInstance();
