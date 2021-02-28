@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "702dbfdb-ae3c-49da-bba8-a59db295b870",
+		"name": "FuegoQuasar",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Post topsecret",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n        {\r\n            \"name\": \"Kenobi\",\r\n            \"distance\": 100.0,\r\n            \"message\": [\"\", \"este\", \"es\", \"un\", \"mensaje\",\"\",\"largo\",\"\",\"\",\"comun\"]\r\n        },\r\n        {\r\n            \"name\": \"Skywalker\",\r\n            \"distance\": 115.5,\r\n            \"message\": [\"Hola\", \"\", \"\", \"\", \"\",\"mas\",\"largo\",\"\",\"\",\"comun\"]\r\n        },\r\n        {\r\n            \"name\": \"Sato\",\r\n            \"distance\": -200,\r\n            \"message\": [\"\", \"\", \"es\", \"\", \"mensaje\",\"mas\",\"\",\"de\",\"lo\"]\r\n        }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "ec2-3-19-141-132.us-east-2.compute.amazonaws.com:8080/api/topsecret",
+					"host": [
+						"ec2-3-19-141-132",
+						"us-east-2",
+						"compute",
+						"amazonaws",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"topsecret"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get topsecret_split",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "ec2-3-19-141-132.us-east-2.compute.amazonaws.com:8080/api/topsecret_split/",
+					"host": [
+						"ec2-3-19-141-132",
+						"us-east-2",
+						"compute",
+						"amazonaws",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"topsecret_split",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post topsecret_split",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"distance\": 100.0,\r\n    \"message\": [\r\n        \"\",\r\n        \"este\",\r\n        \"es\",\r\n        \"un\",\r\n        \"mensaje\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "ec2-3-19-141-132.us-east-2.compute.amazonaws.com:8080/api/topsecret_split/Sato",
+					"host": [
+						"ec2-3-19-141-132",
+						"us-east-2",
+						"compute",
+						"amazonaws",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"topsecret_split",
+						"Sato"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put Satelite position",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" :\"Kenobi\",\r\n    \"position\": {\r\n                \"x\":7,\r\n                \"y\":3\r\n          }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "ec2-3-19-141-132.us-east-2.compute.amazonaws.com:8080/api/updatePosition",
+					"host": [
+						"ec2-3-19-141-132",
+						"us-east-2",
+						"compute",
+						"amazonaws",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"updatePosition"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Satelite",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "ec2-3-19-141-132.us-east-2.compute.amazonaws.com:8080/api/Kenobi",
+					"host": [
+						"ec2-3-19-141-132",
+						"us-east-2",
+						"compute",
+						"amazonaws",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"Kenobi"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
